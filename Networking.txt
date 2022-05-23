@@ -1,0 +1,195 @@
+Computer Networking Full Course - OSI Model Deep Dive with Real Life Examples 
+https://www.youtube.com/watch?v=IPvYjXCsTg8
+
+# INTRO
+- ARPANET: first interent between American Universities
+- First website: http://info.cern.ch/hypertext/WWW/TheProject.html
+- WWW: https://en.wikipedia.org/wiki/World_Wide_Web
+- Internet society: Request For Comments
+
+# 17:38 Client-Server Architecture 
+- Server:
+- Client:
+- Request <-> Response
+
+# 22:00 Protocols 
+- Protocols: TCP, UDP, HTTP, etc.  
+
+# 24:20 How Data is Transferred? IP Address
+- Packets
+- IP Address (x.x.x.x) > x=0-255
+- Global (ISP) vs Local (your computer) IP Address
+- NAT: Netwok Access Translator
+ 
+34:23 Port Numbers
+- IPs identify the computer
+- Ports identify the application
+- Ports: 16 bit numbers = 2^16 = 65,000
+- HTTP: port 80
+- Mongo DB: 2707
+- Research port: 0-1023
+- Applications port: 1024-49152
+- mbps = mega (1,000,000) bits per second (download speed)
+- kbps = kilo (1000) bits per second
+ 
+# 42:25 Submarine Cables Map (Optical Fibre Cables)
+- https://www.submarinecablemap.com/
+
+# 48:00 LAN, MAN, WAN
+- LAN: Local Area Network (Small house/office)
+- MAN: Metropolitan (Across cities)
+- WAN: Wide (Across countries)
+
+# 52:20 MODEM, ROUTER
+- Modem: converts data signals from digital into analogical
+- Router: route packages based on IPs 
+
+# 55:47 Topologies (BUS, RING, STAR, TREE, MESH)
+- Bus: in-line network
+- Ring: circle network
+- Star: main centrally located device  
+- Tree: Bus + Stars
+- Mesh: each computer is connectd to the others (expensive)
+
+# 1:01:34 Structure of the Network (Layers) 
+- OSI Model: Open System Interconnection Model (Standard way to communicate between computers)
+
+# 1:06:33 OSI Model (7 Layers) (Conceptual)
+- Application: implemented in software, contains the applications
+- Presentation: converts characters to binary (translation, encoding, encryption, abstraction, compression)
+- Session: sets and manages the connections
+- Transport: transfers data between devices of the same network (UDP/TCP); segments contains: source, destination ports and sequence number 
+- Network: transfers data between devices of different networks; routing; logical addressing
+- Data Link: frames; allows to communicate with the computer; logical addressing (IPs); physical addressing (MAC address)  
+- Pysical: converts signals into bits; hardware (cables, binary data)
+
+# 1:29:00 TCP/IP Model (5 Layers) Internet Protocol Suite (Practical)
+- Application, Transport, Network, Data Link, Physical
+
+# 1:30:20 Client Server Architecture
+- Protocols: rules and regulations
+- Server: system that controls and hosts the application
+- CLIENT > Request > SERVER > Response > CLIENT
+- Ping: time the packets need to reach the destination
+
+# 1:38:18 Peer to Peer Architecture
+- P2P: direct communcations between 2 or more computers (each computer is both client and server)
+ 
+#1:39:52 Networking Devices (Download PDF)
+- Repeater: signal apmplifier
+- Hub: multiport Repeater (active and passive)
+- Bridge: Repeater with additional functions
+- Switch: multiport Bridge
+- Router: routes data packets based on IPs
+- Gateway: connects two networks
+
+# 1:43:05 Protocols
+- TCP/IP: HTTP, DHCP, FTP, SMTP/POP/IMAC (emails), SSH, VNL
+- TELNET: port 23 (not secure)
+- UDP: stateless connection (can loose data)
+- Process: made of multiple threads
+
+# 1:50:22 Sockets
+- Sockets: interface between the Process and the Internet (software)
+
+# 1:51:10 Ports
+- Ports: 
+
+# 1:53:12 HTTP
+- HTTP: Client - Server "Aplication layer protocol"
+- HTTP uses TCP (Transport layer) and is stateless
+
+# 2:00:00 HTTP(GET, POST, PUT, DELETE) (CRUD)
+- Get (retrieve), Post (create), Put (update), Delete
+
+# 2:04:44 Error/Status Codes
+- 1xx (Information) 200 (OK), 3xx (redirection), 4xx (Client error), 5xx (Server error)
+
+# 2:06:30 Cookies
+- Cookies: unique ID string, stored in browser
+- Third Parties cookies: for (other) third parties websites
+
+# 2:11:00 How Email Works?
+- SMTP, POP3 (port 110), IMAC (sync on multiple devices)
+- TCP protocol
+
+# 2:19:00 DNS (Domain Name System)
+- DNS: tranlates websites names (URLs) into IPs
+- Root DNS Servers: have main domain names (.io, .org, .com) (https://root-servers.com)
+- ICANN: Internet Corporation for Assigned Names and Numbers
+- dig: DNS lookup utility ($ dig google.com)
+
+# 2:32:24 TCP/IP Model (Transport Layer)
+- Multiplexer: manages different kind of data
+- Transport layer: attaches Sockets that have port numbers and are contained in data packets
+- Transport layer: manages congestion control (too much data sent in once)
+
+# 2:47:35 Checksum
+- Checksum: checks that all the data is correct and in order (nothing is lost or mixed)
+- the data that was sent is checked with the data that arrived
+
+# 2:49:00 Timers
+- Timers: check that the data sent was received
+- when data is sent, the timer starts and it expires if the data is not received after some time. 
+- sequence numbers: used to identify sequence of data sent
+
+# 2:54:00 UDP (User Datagram Protocol)
+- Connectionless protocol: the data sent is not checked, some data might be lost
+- UDP Packets: contain Header (Source port no., Destination port no., Lenght of the datagram, checksum) and data
+- faster but less precise/secure, used for videos, dns, gaming
+- to see all UPD data packets: $ sudo tcpdump -c 5 
+
+# 3:02:05 TCP (Transmission Control Protocol)
+- segments (divides) in peaces the data sent and add headers from the Application layer
+- provides Congestion control and Error control
+- takes care of: data not arriving
+- mantains the order of data (sequence numbers)
+- connection oriented
+- full duplex: files can be sent simultanously between 2 computers
+
+# 3:09:10 3-Way handshake
+- 1) Client sends a Sync flag to Server (rndm sequence number (32))
+- 2) Server sends Sync + Acknowledgement flag to Client (rndm sequence number + 1 (33))
+- #) Client sends Acknowledgement flag to Server (rndm sequence number + 1 (33))
+
+# 3:13:40 TCP (Network Layer)
+- Routers: each has a network address
+- routing table: contains all the routers source and destination addresses
+- forwarding table: contains only 1 destination address
+- Network address: 192.168.2 |.| 30 (device address) 
+- Subnet ID: 192.168.2 |.| 30 (host ID) 
+
+# 3:21:50 Control Plane
+- creates routing tables
+- static routing: created manually (slow)
+- dynamic routing: automatic
+
+# 3:24:30 IP (Internet Protocol)
+- IPV4: 32 bits (4 numbers x 8 bits each) (192.168.1.100) (total: 2^32)
+- IPV6: 128 bits
+- classes: A,B,C,D,E (0.0.0.0 > 255.255.255.255)
+- class C: 192.168.1.100
+- subnet mask: 192.168.1.100/32 > 32 bits
+- loopback addresses: used by processes that run on your local machine (ex. localhost 127.0.0.1)
+
+# 3:38:45 Packets
+- Header: 20 bytes
+- TTL: Time To Live, limit of hops (transfers) till the package will be dropped (see ping 8.8.8.8)
+
+# 3:41:42 IPV4 vs IPV6
+- IPV6: total IPs available: 2^32
+- IPV6: total IPs available: 2^128, uses more hardware resources; 8 numbers x 16 bits (hexadecimal)
+
+# 3:49:50 Middle Boxes
+- extra devices that interact with Network packages
+- firewall: Global Internet or Local network; statless and stateful (more efficient) 
+
+# 3:52:32 (NAT) Network Address Translation
+- method of mapping IP addresses
+- transform your local machine IP into an IP to be used for the Internet
+- changes the header
+
+# 3:55:40 TCP (Data Link Layer)
+- DHCP: Dynamic Host Cponfiguration Protocol
+- ARP cache (Address Resolution Protocol)
+- Data Link Layer: MAC address (phisical/hardware address)
