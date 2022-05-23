@@ -1,3 +1,6 @@
+### Docker notes
+
+# Intro:
 service docker status
 service docker start
 service docker status
@@ -8,7 +11,8 @@ docker run -p 5000:5000 in28min/hello-world-python:0.0.1.RELEASE
 	- each running container must have a diffreent local port (-p 5001:5000)
 alias chrome='"/mnt/c/Program Files (x86)/Google/Chrome/Application/chrome.exe"'
 chrome http://localhost:5000/
-https://hub.docker.com/u/chris345000
+
+# Docker commands 01:
 docker run -p 5001:5000 in28min/hello-world-java:0.0.1.RELEASE
 docker run -p 5002:5000 in28min/hello-world-nodejs:0.0.1.RELEASE
 docker run -d ...: run a container in detached mode (not hold the terminal)
@@ -17,4 +21,31 @@ docker logs -f 04e52: see logs of container continuosly
 docker images: list images in local machine
 docker container ls: list running containers
 docker container ls -a: list all exited and running containers
-docker container stop 04e5: stops a running container
+docker container stop 04e5: stop a running container
+docker pull mysql: download an app image (mysql) in lthe local machine
+docket search mysql: search for a specific image
+docker image history <ID>: history details
+docker image inspect <ID>: more details
+docker container stop <ID>: stop a running container
+docker container kill <ID>: kill a running container
+docker container remove <ID>: delete a container from local machine (must be stopped first)
+docker container prune: delete all stopped containers from local machine
+docker image remove <ID>: delete image from local machine (must remove containers first)
+docker system df: show docker system usage
+docker system events: get real time events from the server
+docker system info: display system-wide information
+docker system prune: removes unused data
+docker system prune -a: remove all unused images and containers
+docker stats <ID>: show container stats
+
+# Build a docker image:
+in the folder with 3 files: python-app.py, requirements.txt, Dockerfile:
+	docker build -t chris345000/hello-world-python:0.0.1.RELEASE .
+docker images
+docker history 75119b6e9ce1
+docker run -p 5000:5000 chris345000/hello-world-python:0.0.1.RELEASE
+
+# Push docker image to hub.docker.com:
+https://hub.docker.com/u/chris345000
+docker login
+docker push chris345000/hello-world-python:0.0.1.RELEASE
