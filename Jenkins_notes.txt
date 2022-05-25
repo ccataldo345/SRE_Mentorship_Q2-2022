@@ -1,0 +1,65 @@
+### Jenkins notes
+
+- Continuous Integration tool that allows to create pipelines 
+- run Unit Tests, Integration Tests 
+- do code quality checks
+- do package applications and deploy 
+
+# Launch Jenkins with Docker:
+docker-compose --version
+https://hub.docker.com/r/jenkins/jenkins
+docker pull jenkins/jenkins:lts-jdk11
+in the folder with docker-compose.yml file > docker-compose up
+http://localhost:8081
+paste the password
+Install suggested plugins
+u: admin
+P: admin
+
+# Configure Jenkins:
+Manage Jenkins > Global Tool Configuration > Maven + Docker
+	??? Do not find Docker ???
+
+# Create a new job:
+Jenkins > New job > pipeline
+Build Triggers > Poll SCM: "* * * * *"
+Pipeline > Pieline script from SCM > https://github.com/ccataldo345/jenkin-devops-microservice
+Save
+Build now
+CLick on link > Console output
+
+///ERROR: stderr: fatal: couldn't find remote ref refs/heads/master
+> git main vs master branch
+> change: Branch Specifier (blank for 'any') > */main
+
+# Jenkinsfile:
+- Scripted:
+node {
+	echo 'Build'
+	echo 'Test'
+	echo 'Integration Test'
+}
+
+- Declarative:
+pipeline {
+	agent any
+	stages {
+		stage('Build') {
+			steps {
+				echo 'Build'
+			}
+		}
+		stage('Test') {
+			steps {
+				echo 'Test'
+			}
+		}
+		stage('Integration Test') {
+			steps {
+				echo 'Integration Test'
+			}
+		}
+	}
+}	
+		
+- Post: always, success, failure, unstated, changed
