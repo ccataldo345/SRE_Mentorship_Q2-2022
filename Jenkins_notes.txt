@@ -9,7 +9,7 @@
 docker-compose --version
 https://hub.docker.com/r/jenkins/jenkins
 docker pull jenkins/jenkins:lts-jdk11
-in the folder with docker-compose.yml file > docker-compose up
+in the folder with docker-compose.yml file > docker-compose -f <filename> up
 (can rename docker-compose.yml into new-name.yml >>> docker-compose -p="new-name" up)
 http://localhost:8081
 paste the password
@@ -26,7 +26,10 @@ docker stop ID
 
 # Configure Jenkins:
 Manage Jenkins > Global Tool Configuration > Maven + Docker
+(Select "install automatically" and give name (MyMaven and MyDocker)
 	??? Do not find Docker ???
+	Manage Jenkins > Manage Plugins > Availables > Docker Pipeline (select) > Install witout restart
+	Manage Jenkins > Global Tool Configuration > Docker
 
 # Create a new job:
 Jenkins > New job > pipeline
@@ -71,3 +74,16 @@ pipeline {
 }	
 		
 - Post: always, success, failure, unstated, changed
+
+/// ERROR: permission denied
+	https://www.udemy.com/course/devops-with-docker-kubernetes-and-azure-devops/learn/lecture/18050129#questions/10725398 
+	I had the same error(docker :Permission denied) , so I noticed that   the last line in docker-compose.yml  gave  an error when executing in my host machine:
+	michael@ ~$/usr/local/bin/docker --version
+	bash: /usr/local/bin/docker: Is a directory
+	But this worked:
+	michael@ ~$/usr/bin/docker --version
+	Docker version 19.03.8, build afacb8b7f0
+	so I modified the last line in docker-compose.yml with this:
+	- /usr/bin/docker:/usr/local/bin/docker
+	After that everything works like a charm! Hope it helps!!
+	PS: My host OS is Linux Mint 18.3.

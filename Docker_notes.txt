@@ -29,7 +29,7 @@ docker image history <ID>: history details
 docker image inspect <ID>: more details
 docker container stop <ID>: stop a running container
 docker container kill <ID>: kill a running container
-docker container remove <ID>: delete a container from local machine (must be stopped first)
+docker container rm <ID>: delete a container from local machine (must be stopped first)
 docker container prune: delete all stopped containers from local machine
 docker image remove <ID>: delete image from local machine (must remove containers first)
 docker system df: show docker system usage
