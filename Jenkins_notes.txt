@@ -5,16 +5,24 @@
 - do code quality checks
 - do package applications and deploy 
 
-# Launch Jenkins with Docker:
+# Launch Jenkins with Docker 1st time:
 docker-compose --version
 https://hub.docker.com/r/jenkins/jenkins
 docker pull jenkins/jenkins:lts-jdk11
 in the folder with docker-compose.yml file > docker-compose up
+(can rename docker-compose.yml into new-name.yml >>> docker-compose -p="new-name" up)
 http://localhost:8081
 paste the password
 Install suggested plugins
 u: admin
 P: admin
+
+# Launch Jenkins again:
+docker container ls -a (show all containers, including not running)
+docker start ID
+docker container ls (check if it is running)
+http://localhost:8081
+docker stop ID
 
 # Configure Jenkins:
 Manage Jenkins > Global Tool Configuration > Maven + Docker

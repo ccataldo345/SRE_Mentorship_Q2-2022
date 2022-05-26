@@ -21,7 +21,8 @@ docker logs -f 04e52: see logs of container continuosly
 docker images: list images in local machine
 docker container ls: list running containers
 docker container ls -a: list all exited and running containers
-docker container stop 04e5: stop a running container
+docker container start ID: start a stopeed container
+docker container stop ID: stop a running container
 docker pull mysql: download an app image (mysql) in lthe local machine
 docket search mysql: search for a specific image
 docker image history <ID>: history details
