@@ -10,7 +10,8 @@ docker-compose --version
 https://hub.docker.com/r/jenkins/jenkins
 docker pull jenkins/jenkins:lts-jdk11
 in the folder with docker-compose.yml file > docker-compose -f <filename> up
-(can rename docker-compose.yml into new-name.yml >>> docker-compose -p="new-name" up)
+sudo chown -R $USER:$USER /var/jenkins_home
+du -sh /var/jenkins_home
 http://localhost:8081
 paste the password
 Install suggested plugins
@@ -89,3 +90,72 @@ pipeline {
 	- /usr/bin/docker:/usr/local/bin/docker
 	After that everything works like a charm! Hope it helps!!
 	PS: My host OS is Linux Mint 18.3.
+
+# Pipeline Syntax > Snippet Generator: creates Pipeline script code 
+	- http://localhost:8081/job/jenkin-devops-microservice/pipeline-syntax/
+	- ex: user input, repeat block, timeout, etc
+	
+# Pipeline Syntax > Global Variable Reference: variables that can be used in pipelines
+	- http://localhost:8081/job/jenkin-devops-microservice/pipeline-syntax/globals
+	
+# Add Maven and Docker to Pipeline script:
+	environment {
+		mavenHome = tool 'myMaven'
+		dockerHome = tool 'myDocker'
+		PATH = "$mavenHome/bin:$dockerHome/bin:$PATH"
+	}
+
+# Maven Compile, Test, Integration Test and Package (jar file):
+	stage("Compile") {
+			steps {
+				sh "mvn clean compile"
+			}
+		}
+		stage("Test") {
+			steps {
+				sh "mvn test"
+			}
+		}
+		stage("Integration Test") {
+			steps {
+				sh "mvn failsafe:integration-test failsafe:verify"
+			}
+		}
+		stage("Package") {
+			steps {
+				// create jar file
+				echo "mvn package -DskipTests"
+				sh "mvn package -DskipTests"
+			}
+		}
+
+# Set Docker Hub credentials in Jenkins:
+	- Jenkins > Manage Jenkins > Manage Credentials
+	- Stores scoped to Jenkins > Jenkins > Global credentials
+	- Add Credentials
+	- http://localhost:8081/credentials/store/system/domain/_/newCredentials
+	- Scope: Global (Jenkins, nodes, items, all child items, etc)
+	- Username: chris345000 (<Docker Hub username>)
+	- Password: <Docker Hub password>
+	- ID: dockerhub
+	- Description: dockerhub
+	
+# Create and Push docker container in Docker Hub:
+	stage("Build Docker Image") {
+		steps {
+			// sh "docker build -t chris345000/currency-exchange-devops:$env.BUILD_TAG"
+			script {
+				dockerImage = docker.build("chris345000/currency-exchange-devops:${env.BUILD_TAG}")
+			}
+		}
+	}
+	stage("Push Docker Image") {
+		steps {
+			script {
+				docker.withRegistry("", "dockerhub") {
+					dockerImage.push();
+					dockerImage.push('latest');
+				}
+			}
+		}
+	}
