@@ -23,6 +23,7 @@ docker container ls -a (show all containers, including not running)
 docker start ID
 docker container ls (check if it is running)
 http://localhost:8081
+http://localhost:8081/login?from=%2F
 docker stop ID
 
 # Configure Jenkins:

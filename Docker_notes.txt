@@ -50,3 +50,7 @@ docker run -p 5000:5000 chris345000/hello-world-python:0.0.1.RELEASE
 https://hub.docker.com/u/chris345000
 docker login -u chris345000
 docker push chris345000/hello-world-python:0.0.1.RELEASE
+
+# Docker info:
+docker info
+sudo du -sh /var/lib/docker/
