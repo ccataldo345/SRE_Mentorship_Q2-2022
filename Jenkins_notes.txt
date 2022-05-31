@@ -35,15 +35,17 @@ Manage Jenkins > Global Tool Configuration > Maven + Docker
 Jenkins > New job > pipeline
 Build Triggers > Poll SCM: "* * * * *"
 Pipeline > Pieline script from SCM > https://github.com/ccataldo345/jenkin-devops-microservice
+	   Branch Specifier (blank for 'any') > */main
 Save
 Build now
-CLick on link > Console output
+Build History > Click on date > Console output
 
 ///ERROR: stderr: fatal: couldn't find remote ref refs/heads/master
 > git main vs master branch
 > change: Branch Specifier (blank for 'any') > */main
 
 # Jenkinsfile:
+- Groovy script
 - Scripted:
 node {
 	echo 'Build'
