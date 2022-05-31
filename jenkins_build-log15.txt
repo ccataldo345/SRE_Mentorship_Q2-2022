@@ -1,0 +1,70 @@
+Login Succeeded
+[Pipeline] {
+[Pipeline] isUnix
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sh
++ docker tag chris345000/currency-exchange-devops:jenkins-jenkin-devops-microservice-15 chris345000/currency-exchange-devops:jenkins-jenkin-devops-microservice-15
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] isUnix
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sh
++ docker push chris345000/currency-exchange-devops:jenkins-jenkin-devops-microservice-15
+The push refers to repository [docker.io/chris345000/currency-exchange-devops]
+9fec3095ba0c: Preparing
+ceaf9e1ebef5: Preparing
+9b9b7f3d56a0: Preparing
+f1b5933fe4b5: Preparing
+ceaf9e1ebef5: Mounted from library/openjdk
+9b9b7f3d56a0: Mounted from library/openjdk
+f1b5933fe4b5: Mounted from library/openjdk
+9fec3095ba0c: Pushed
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] isUnix
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sh
++ docker tag chris345000/currency-exchange-devops:jenkins-jenkin-devops-microservice-15 chris345000/currency-exchange-devops:latest
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] isUnix
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sh
++ docker push chris345000/currency-exchange-devops:latest
+The push refers to repository [docker.io/chris345000/currency-exchange-devops]
+9fec3095ba0c: Preparing
+ceaf9e1ebef5: Preparing
+9b9b7f3d56a0: Preparing
+f1b5933fe4b5: Preparing
+ceaf9e1ebef5: Layer already exists
+9b9b7f3d56a0: Layer already exists
+9fec3095ba0c: Layer already exists
+f1b5933fe4b5: Layer already exists
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withDockerRegistry
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] echo
+Success.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
