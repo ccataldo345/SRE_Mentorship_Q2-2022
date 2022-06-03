@@ -9,14 +9,18 @@
 docker-compose --version
 https://hub.docker.com/r/jenkins/jenkins
 docker pull jenkins/jenkins:lts-jdk11
-in the folder with docker-compose.yml file > docker-compose -f <filename> up
-sudo chown -R $USER:$USER /var/jenkins_home
+in the folder with docker-compose.yml file:
+	docker-compose -f <filename> up -d
+	(-d means that runs in the background, does not receive input or display output)
+??? sudo chown -R $USER:$USER /var/jenkins_home
 du -sh /var/jenkins_home
 http://localhost:8081
 paste the password
 Install suggested plugins
 u: admin
 P: admin
+- Delete the container (will persists if folder is set and yml file recalled):
+docker-compose down
 
 # Launch Jenkins again:
 docker container ls -a (show all containers, including not running)
