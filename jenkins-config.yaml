@@ -1,0 +1,29 @@
+jenkins:
+  systemMessage: "cc: Jenkins configured automatically by Jenkins Configuration as Code plugin\n\n"
+
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+          - usernamePassword:
+              description: myCred
+              id: myCred  
+              username: admin
+              password: admin
+              scope: GLOBAL     
+tool:
+  dockerTool:
+    installations:
+    - name: "myDocker"
+  git:
+    installations:
+    - home: "git"
+      name: "Default"
+  maven:
+    installations:
+    - name: "myMaven"
+      properties:
+      - installSource:
+          installers:
+          - maven:
+              id: "3.6.3"
