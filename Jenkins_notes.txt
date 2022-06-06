@@ -169,25 +169,46 @@ pipeline {
 - https://www.youtube.com/watch?v=bTFMvXIkNIg
 - Manage Jenkins > Jenkins CLI > copy link address "jenkins-cli.jar" (http://localhost:8081/jnlpJars/jenkins-cli.jar)
 wget http://localhost:8081/jnlpJars/jenkins-cli.jar
-java -jar jenkins-cli.jar -s http://localhost:8081/ who-am-i (>>> should report: "Authenticated as: anonymous")
+cp jenkins-cli.jar /var/jenkins_home/
+java -jar /var/jenkins_home/jenkins-cli.jar -s http://localhost:8081/ who-am-i (>>> should report: "Authenticated as: anonymous")
 
 - generate token in Jenkins UI:
 http://localhost:8081/user/admin/configure
 > Add new token (admin-token) > Generate > copy
 echo "admin:<token>" > jenkins_admin-token
+cp jenkins_admin-token /var/jenkins_home/
 
 - Install plugins (*must restart Jenkins after installed):
 Find plugins here: https://plugins.jenkins.io/
 	> click on "How to install" and copy the ,plugin-name:version> 
-java -jar jenkins-cli.jar -s http://localhost:8081/ -auth @jenkins_admin-token install-plugin docker-workflow:1.28
-java -jar jenkins-cli.jar -s http://localhost:8081/ -auth @jenkins_admin-token install-plugin maven-plugin:3.19
+java -jar /var/jenkins_home/jenkins-cli.jar -s http://localhost:8081/ -auth @jenkins_admin-token install-plugin docker-workflow:1.28
+java -jar /var/jenkins_home/jenkins-cli.jar -s http://localhost:8081/ -auth @jenkins_admin-token install-plugin maven-plugin:3.19
 	> should receive report: "Installing docker-workflow:1.28 from update center"
 
 - Restart Jenkins:
-java -jar jenkins-cli.jar -s http://localhost:8081/ -auth @jenkins_admin-token safe-restart
+java -jar /var/jenkins_home/jenkins-cli.jar -s http://localhost:8081/ -auth @jenkins_admin-token safe-restart
+docker container ls (should be empty, no jenkins container is running)
+docker container start jenkins
 
 - list installed plugins:
-java -jar jenkins-cli.jar -s http://localhost:8081/ -auth @jenkins_admin-token list-plugins
+java -jar /var/jenkins_home/jenkins-cli.jar -s http://localhost:8081/ -auth @jenkins_admin-token list-plugins
 
 - list all CLI commands:
-java -jar jenkins-cli.jar -s http://localhost:8081/ -auth @jenkins_admin-token help
+java -jar /var/jenkins_home/jenkins-cli.jar -s http://localhost:8081/ -auth @jenkins_admin-token help
+
+# Configuration as code plugin:
+- https://plugins.jenkins.io/configuration-as-code/
+- install plugin in Jenkins:
+	java -jar /var/jenkins_home/jenkins-cli.jar -s http://localhost:8081/ -auth @jenkins_admin-token install-plugin c onfiguration-as-code:1429.v09b_044a_c93de safe-restart
+- docker container ls (should be empty, no jenkins container is running)
+- docker container start jenkins
+- go to: Manage Jenkins > Configuration as code > Download configuration (jenkins.yaml)
+- touch /var/jenkins_home/jenkins-config.yaml (nano + paste downloaded file text jenkins.yaml)
+- Replace configuration source with: Path or URL: 
+	/var/jenkins_home/jenkins-config.yaml
+- Apply new configuration
+/// ERROR:
+	if the config file is not working or missing:
+	- cp io.jenkins.plugins.casc.CasCGlobalConfig.xml io.jenkins.plugins.casc.CasCGlobalConfig.xml.BKP
+	- rm io.jenkins.plugins.casc.CasCGlobalConfig.xml
+	- docker container restart jenkins
