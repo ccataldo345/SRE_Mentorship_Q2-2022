@@ -1,5 +1,5 @@
 jenkins:
-  systemMessage: "cc: Jenkins configured automatically by Jenkins Configuration as Code plugin\n\n"
+  systemMessage: "cc_ Jenkins configured automatically by Jenkins Configuration as Code plugin\n\n"
 
 credentials:
   system:
