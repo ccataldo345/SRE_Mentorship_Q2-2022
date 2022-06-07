@@ -3,11 +3,11 @@ credentials:
     domainCredentials:
     - credentials:
       - usernamePassword:
-          description: "myCred"
-          id: "myCred"
-          password: "{AQAAABAAAAAQmP4QZyO5YokZyiQsZx998hiyalJcLQxgCPqsMIRb9rQ=}"
+          description: "dockerhub"
+          id: "dockerhub"
+          password: "{AQAAABAAAAAQWEGOclXF0sAykzUJ3wP+J3hVS2tN9jH87fvoZPYS1rQ=}"
           scope: GLOBAL
-          username: "admin"
+          username: "chris345000"
 jenkins:
   agentProtocols:
   - "JNLP4-connect"
@@ -43,6 +43,7 @@ jenkins:
       - id: "admin"
         name: "Chris C"
         properties:
+        # - "myView"
         - preferredProvider:
             providerId: "default"
         - "timezone"
@@ -50,9 +51,6 @@ jenkins:
             emailAddress: "chris.c@cmail.com"
         - "apiToken"
   slaveAgentPort: 50000
-  systemMessage: |+
-    cc_ Jenkins configured automatically by Jenkins Configuration as Code plugin
-
   updateCenter:
     sites:
     - id: "default"
@@ -78,8 +76,6 @@ unclassified:
     - "jobBuildDiscarder"
   buildStepOperation:
     enabled: false
-  casCGlobalConfig:
-    configurationPath: "var/jenkins_home/jenkins-config.yaml"
   email-ext:
     adminRequiredForTemplateTesting: false
     allowUnregisteredEnabled: false
