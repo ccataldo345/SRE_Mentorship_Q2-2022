@@ -203,9 +203,10 @@ java -jar /var/jenkins_home/jenkins-cli.jar -s http://localhost:8081/ -auth @jen
 - docker container ls (should be empty, no jenkins container is running)
 - docker container start jenkins
 - go to: Manage Jenkins > Configuration as code > Download configuration (jenkins.yaml)
-- touch /var/jenkins_home/jenkins-config.yaml (nano + paste downloaded file text jenkins.yaml)
+- mv jenkins.yaml /var/jenkins_home/jenkins.yaml
+- comment out (insert #) in the line " - "myView" >>> "# - "myView"
 - Replace configuration source with: Path or URL: 
-	/var/jenkins_home/jenkins-config.yaml
+	/var/jenkins_home/jenkins.yaml
 - Apply new configuration
 /// ERROR:
 	if the config file is not working or missing:
