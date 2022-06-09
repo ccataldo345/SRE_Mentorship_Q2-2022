@@ -1,0 +1,69 @@
+### Terraform notes
+
+# Infrastructure as code:
+- Create template > Provision server > Install software > Configure software > Deploy app
+- Provision server > Terraform + AWS
+- Install and Configure software = Configuration management tools > Ansible, Chef, Puppet
+- Deploy applications on servers > Jenkins, Azure Devops
+
+# Terraform
+- install: https://learn.hashicorp.com/tutorials/terraform/install-cli
+- terraform version
+- mkdir ~/terraform/01-terraform-basics
+- touch main.tf
+
+# specific a Provider, region and version:
+	- https://registry.terraform.io/providers/hashicorp/aws/latest/docs
+	- with Terraform in man.tf:
+		terraform {
+		  required_providers {
+			aws = {
+			  source  = "hashicorp/aws"
+			  version = "~> 3.0"
+			}
+		  }
+		}
+		provider "aws" {
+		  region = "eu-central-1"
+		}
+	- $ terraform init
+
+# login to AWS - IAM - chris01 (use 1Password)
+- Autentication > Environmet variables approach:
+	$ export AWS_ACCESS_KEY_ID=<AWS-access-key-ID>
+	$ export AWS_SECRET_ACCESS_KEY=<AWS-secret-access-key>
+	$ aws iam list-users   #check AWS users
+
+- Create Access keys (user account (no root account!)
+	Users > select user > Security Credentials > Create Access Key
+	CLI:	
+		aws configure > Key Id + Secret Key + "eu-central-1" + default
+		aws iam list-users   #check AWS users
+		
+# list of commands:
+https://github.com/in28minutes/devops-master-class/tree/master/terraform#commands-executed 
+
+# create an S3 bucket in AWS (store and retrieve data, high durability and availabilty):
+	- In AWS: Services > S3 > Create a Bucket
+	- with Terraform in man.tf:
+		resource "aws_s3_bucket" "my_s3_bucket" {
+			bucket = "my-s3-bucket-chris345-001"
+			versioning {
+				enabled = true
+			}
+		} 
+	- $ terraform plan	 # check only what happens if run main.tf
+	- $ terraform apply	  # execute main.tf, accept with 'yes'
+	- see new created bucket in AWS > S3 > Buckets
+	- versioning = store multiple versions of the same file over a period of time
+
+# States:
+- Desired: main.ts
+- Known: terrafor.tfstate
+- Actuial: AWS online
+- $ terraform apply > makes the Desired state Actual
+
+# projects in28minutes repo:
+- https://github.com/in28minutes/devops-master-class/tree/master/terraform/backup
+
+# Terraform console:
