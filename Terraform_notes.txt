@@ -82,6 +82,33 @@ https://github.com/in28minutes/devops-master-class/tree/master/terraform#command
 	> should return "my_s3_bucket_versioning = true" and details
 	
 # creat an Iam user:
+- must use root user credentials:
+	export AWS_ACCESS_KEY_ID=
+	export AWS_SECRET_ACCESS_KEY=
+- in man.tf:
+	resource "aws_iam_user" "my_iam_user" {
+		name = "my_iam_user_abc"
+	}
+	output "my_iam_user_details" {
+		value = aws_iam_user.my_iam_user
+	}
 - $ terraform plan -out iam.tfplan
 - $ terraform apply "iam.tfplan"
 - $ terraform apply -refresh=false
+- $ terraform console
+	> aws_iam_user.my_iam_user
+	> aws_iam_user.my_iam_user.arn
+
+# update a user:
+- in man.tf:
+	resource "aws_iam_user" "my_iam_user" {
+		name = "my_iam_user_abc_updated"
+	}
+- $  terraform apply -target="aws_iam_user.my_iam_user"
+
+# Terraform to Git:
+- never upload to Git the files:
+	*.tfstate
+	*.tfstate.backup
+	.terraform/
+

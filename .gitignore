@@ -1,0 +1,4 @@
+# terraform excludes
+*.tfstate
+*.tfstate.backup
+.terraform/
