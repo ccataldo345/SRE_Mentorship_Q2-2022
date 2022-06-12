@@ -117,3 +117,17 @@ https://github.com/in28minutes/devops-master-class/tree/master/terraform#command
 
 # Desctry the created resources:
 - $ terraform destroy
+
+# Create multiple users:
+
+# Console commands:
+- terrform console:
+	> terraform validate   #check terraform syntax
+	> terraform fmt   # format indentation
+	> terraform show   #show info on the current state
+	
+# Documentation:
+- https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_user
+- https://www.terraform.io/cli/commands/apply
+
+# Variables:
