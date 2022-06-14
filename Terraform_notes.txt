@@ -62,6 +62,8 @@ https://github.com/in28minutes/devops-master-class/tree/master/terraform#command
 - Known: terrafor.tfstate
 - Actuial: AWS online
 - $ terraform apply > makes the Desired state Actual
+- https://www.terraform.io/language/state 
+- https://www.terraform.io/language/state/purpose
 
 # projects in28minutes repo:
 - https://github.com/in28minutes/devops-master-class/tree/master/terraform/backup
@@ -170,3 +172,50 @@ https://github.com/in28minutes/devops-master-class/tree/master/terraform#command
 		$ terraform plan -refresh="false"
 		$ terraform plan -refresh="false" -var "iam_user_name_prefix="VALUE_FROM_COMMAND_LINE"   
 		  #command line vars have priority on other variables (export, env) 
+
+# List and Sets:
+- Collection functions: https://www.terraform.io/language/functions/list 
+- List in main.tf (use index number):
+	variable "names" {
+	  default = ["chris", "tom", "jane"]
+	}
+	resource "aws_iam_user" "my_iam_users" {
+	  count = length(var.names)
+	  name  = var.names[count.index]
+	}
+- Set in main.tf (use index name):
+	variable "names" {
+	  default = ["mark", "chris", "tom", "jane"]
+	}
+	resource "aws_iam_user" "my_iam_users" {
+	  for_each = toset(var.names)
+	  name = each.value
+	}
+
+# Maps (map of strings and map of map):
+- in main.tf:
+	variable "users" {
+	  default = {
+		# lisa: "UK",
+		# mark: "USA",
+		# chris: "EU"
+		llisa : { country : "UK", department : "ABC" },
+		mark : { country : "USA", department : "CDE" },
+		chris : { country : "EU", department : "XYZ" }
+	  }
+	}
+	resource "aws_iam_user" "my_iam_users" {
+	  for_each = var.users
+	  name     = each.key
+	  tags = {
+		# country : each.value
+		country : each.value.country
+		epartment : each.value.department
+	  }
+	}
+- terraform console:
+	> var.users
+	> var.users.lisa
+	> keys(var.users)
+	> values(var.users)
+	> lookup(var.users,"lisa")
