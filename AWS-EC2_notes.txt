@@ -1,0 +1,24 @@
+### AWS-EC2
+
+- EC2 Elastic Compute Cloud: servers in the Cloud
+- Multiple Regions: better availability and low latency
+- each Region conteins multiple Availability Zones
+
+- VPC Virtual Private Cloud
+	- contains multiple subnets
+	- Private subnet = Database
+	- Public aubnet = http server
+
+- Running Instances > Launch Instance:
+	1. Choose an Amazom Machine Image (AMI) >>> Amazon Linux 2 AMI (HVM) (copy ami number)
+	2. Choose an Instance type >>> t2.micro
+	3. Configure Instance Details:
+		- Network: vpc default (copy number)
+	4. Add Storage
+	5. Add Tags
+	6. Configure Security Group:
+		- New Security Group
+		- Add Rule type: SSH, HTTP, HTTPS
+	
+- CIDR = IPs block range
+	CIDR ["0.0.0.0/0"] = all IPs
