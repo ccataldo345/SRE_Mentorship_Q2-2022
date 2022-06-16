@@ -20,5 +20,31 @@
 		- New Security Group
 		- Add Rule type: SSH, HTTP, HTTPS
 	
-- CIDR = IPs block range
+- CIDR = IPs block range:
 	CIDR ["0.0.0.0/0"] = all IPs
+
+- Key-Pairs:
+	- Create key pair, name: defailt-ec2, file format: .pem
+	- never share or publish the .pem file!
+	- put the .pem file in ~/aws/aws_keys
+	- chmod 400 default-ec2.pem (read only)
+
+- Security Group:
+	- https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group
+
+-  AWS Instance:
+	- https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance
+
+- Arguments:
+	- see "Force replacement" or "Force new resource".
+	
+- Immutable Srevers with IAC Infrastructure as Code:
+	- when updating the project, create a new server with the update and after that remove the old server 
+
+- Data Provider:
+	- use default AWS values (default VPC. etc)
+	- https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/default_vpc 
+	- in main.tf: 
+		resource "aws_default_vpc" "default" {}
+		vpc_id = aws_default_vpc.default.id
+
