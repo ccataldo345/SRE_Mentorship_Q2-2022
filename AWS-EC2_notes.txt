@@ -47,4 +47,10 @@
 	- in main.tf: 
 		resource "aws_default_vpc" "default" {}
 		vpc_id = aws_default_vpc.default.id
-
+	- Subnets:
+		- main.tf: 
+			data "aws_subnet_ids" "default_subnets" {
+				vpc_id = aws_default_vpc.default.id
+			} 
+		- (console): > data.aws_subnet_ids.default_subnets
+			> tolist(data.aws_subnet_ids.default_subnets.ids)[0]
