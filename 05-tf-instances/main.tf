@@ -1,18 +1,9 @@
-variable "aws_key_pair" {
-  default = "~/aws/aws_keys/default-ec2.pem"
-}
-
 provider "aws" {
   region = "us-east-1"
 }
 
 resource "aws_default_vpc" "default" {
 
-}
-
-// data provider:
-data "aws_subnet_ids" "default_subnets" {
-	vpc_id = aws_default_vpc.default.id
 }
 
 // Create Security Group:
@@ -51,11 +42,13 @@ resource "aws_security_group" "http_server_sg" {
 
 // Create an AWS instance (EC2 Virtual Server)
 resource "aws_instance" "http_server" {
-  ami                    = "ami-0cff7528ff583bf9a"
+  # ami                    = "ami-0cff7528ff583bf9a"
+  ami                    = data.aws_ami.aws_linux_2_latest.id
   key_name               = "default-ec2"
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.http_server_sg.id]
-  subnet_id              = "subnet-061a51286cb94f112" // VPC > Subnets (pic any default (witohout name))
+  // subnet_id              = "subnet-061a51286cb94f112" // VPC > Subnets (pic any default (witohout name))
+  subnet_id = tolist(data.aws_subnet_ids.default_subnets.ids)[0]
 
   connection {
     type        = "ssh"
@@ -72,6 +65,7 @@ resource "aws_instance" "http_server" {
     ]
   }
 }
+
 
 // ami-0cff7528ff583bf9a
 // vpc-09e25fb07f9d8c373
