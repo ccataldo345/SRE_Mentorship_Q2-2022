@@ -54,3 +54,6 @@
 			} 
 		- (console): > data.aws_subnet_ids.default_subnets
 			> tolist(data.aws_subnet_ids.default_subnets.ids)[0]
+
+- $ terraform graph
+	https://dreampuf.github.io/GraphvizOnline/
