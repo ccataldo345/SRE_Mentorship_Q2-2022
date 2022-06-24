@@ -57,3 +57,13 @@
 
 - $ terraform graph
 	https://dreampuf.github.io/GraphvizOnline/
+
+- user_data:
+	- main.tf:
+		user_data = file("install_httpd.sh")
+	- install_httpd.sh:
+		#!/bin/bash
+		yum install httpd -y 
+		sudo service httpd start
+		sudo echo "Virtual Server link: ${self.public_dns}" > /var/www/html/index.html
+	- $ terraform apply -target='aws_instance.http_server["user_data"]'
