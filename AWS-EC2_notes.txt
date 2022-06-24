@@ -65,5 +65,9 @@
 		#!/bin/bash
 		yum install httpd -y 
 		sudo service httpd start
-		sudo echo "Virtual Server link: ${self.public_dns}" > /var/www/html/index.html
+		sudo echo "Virtual Server link: $DNS" > /var/www/html/index.html
 	- $ terraform apply -target='aws_instance.http_server["user_data"]'
+
+- SSH to EC2:
+	-$ ssh -i ~/aws/aws_keys/default-ec2.pem ec2-user@54.157.130.224
+	- cat /var/www/html/index.html
