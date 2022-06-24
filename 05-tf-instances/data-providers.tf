@@ -15,3 +15,10 @@ data "aws_ami" "aws_linux_2_latest" {
 data "aws_ami_ids" "aws_linux_2_latest_ids" {
   owners = ["amazon"]
 }
+
+data "template_file" "DNS" {
+  template = file("dns.sh")
+  vars = {
+    dns = aws_instance.http_server.public_dns
+  }
+}
