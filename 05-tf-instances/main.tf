@@ -48,8 +48,7 @@ resource "aws_instance" "http_server" {
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.http_server_sg.id]
   // subnet_id              = "subnet-061a51286cb94f112" // VPC > Subnets (pic any default (witohout name))
-  subnet_id        = tolist(data.aws_subnet_ids.default_subnets.ids)[0]
-  user_data_base64 = base64encode(data.template_file.DNS.rendered)
+  subnet_id = tolist(data.aws_subnet_ids.default_subnets.ids)[0]
 
   connection {
     type        = "ssh"

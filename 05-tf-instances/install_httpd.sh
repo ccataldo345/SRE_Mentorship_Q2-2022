@@ -1,5 +1,5 @@
 #!/bin/bash
 yum install httpd -y 
 sudo service httpd start
-sudo echo "Virtual Server link: ${self.public_dns}" > /var/www/html/index.html 
-# sudo echo "Virtual Server link: ??? public dns variable ??? " > /var/www/html/index.html 
+# DNS=$(curl -s http://169.254.169.254/latest/meta-data/public-hostname)
+sudo echo "Virtual Server link: cc03" > /var/www/html/index.html 
