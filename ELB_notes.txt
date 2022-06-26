@@ -1,0 +1,13 @@
+### ELB Elastic Load Balancer
+
+- What is AWS Elastic load balancer ELB?:
+  Elastic Load Balancing (ELB) automatically distributes incoming application traffic across multiple targets and virtual appliances in one or more Availability Zones (AZs). 
+
+- in teraform console (see project tf 06):
+  > aws_instance.http_servers
+  > values(aws_instance.http_servers)
+  > values(aws_instance.http_servers).*.id
+    (values(<map>) = map to set)
+    (map = contains {([])} )
+    (set = contains [{()}] )
+    (*.id = all values (all ids))
