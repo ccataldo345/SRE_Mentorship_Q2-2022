@@ -72,3 +72,10 @@
 - SSH to EC2:
 	-$ ssh -i ~/aws/aws_keys/default-ec2.pem ec2-user@54.157.130.224
 	- cat /var/www/html/index.html
+	
+- SSH from Public to Private instance:
+  - ssh -i ~/aws/aws_keys/default-ec2.pem ec2-user@3.91.236.13
+  - sudo nano default-ec2.pem
+    > copy-paste text from ~/aws/aws_keys/default-ec2.pem
+  - sudo chmode 400 default-ec2.pem
+  - sudo ssh -i default-ec2.pem ec2-user@10.0.3.101
