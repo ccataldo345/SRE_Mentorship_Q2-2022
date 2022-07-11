@@ -8,31 +8,6 @@ resource "aws_security_group" "public_sg" {
   }
 }
 
-/*
-  // HTTP:
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  // SSH:
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = -1
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-*/
-
 resource "aws_security_group" "private_sg" {
   name   = "Private_sg"
   vpc_id = aws_vpc.dev_vpc.id
@@ -93,11 +68,15 @@ resource "aws_instance" "public_instance" {
     private_key = file(var.aws_key_pair)
   }
 
-  // user_data = file("install-httpd_public-server.sh")
+  user_data = file("install-httpd_public-server.sh")
 
   tags = {
     Name = "EC2_Public_instance"
   }
+
+  depends_on = [
+    aws_nat_gateway.nat_gw
+  ]
 }
 
 // Create EC2 instance in Private subnet
@@ -109,11 +88,15 @@ resource "aws_instance" "private_instance" {
   subnet_id                   = aws_subnet.private_subnet.id
   count                       = 1
   associate_public_ip_address = "false"
-  // user_data = file("install-httpd_private-server.sh")
+  user_data = file("install-httpd_private-server.sh")
 
   tags = {
     Name = "EC2_Private_instance"
   }
+
+  depends_on = [
+    aws_nat_gateway.nat_gw
+  ]
 }
 
 resource "aws_network_interface_sg_attachment" "sg_attachment" {
