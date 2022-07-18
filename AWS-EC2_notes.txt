@@ -70,12 +70,13 @@
 	- $ terraform apply -target='aws_instance.http_server["user_data"]'
 
 - SSH to EC2:
-	-$ ssh -i ~/aws/aws_keys/default-ec2.pem ec2-user@54.157.130.224
+	-$ ssh -i ~/aws/aws_keys/default-ec2.pem ec2-user@$(terraform output -raw aws_public_instance_public_ip)
 	- cat /var/www/html/index.html
+- Get private ip: 
+	  - echo $(terraform output -raw aws_private_instance_private_ip)
 	
 - SSH from Public to Private instance:
-  - ssh -i ~/aws/aws_keys/default-ec2.pem ec2-user@3.91.236.13
   - sudo nano default-ec2.pem
     > copy-paste text from ~/aws/aws_keys/default-ec2.pem
-  - sudo chmode 400 default-ec2.pem
-  - sudo ssh -i default-ec2.pem ec2-user@10.0.3.101
+  - sudo chmod 400 default-ec2.pem
+  - sudo ssh -i default-ec2.pem ec2-user@<private-ip>
