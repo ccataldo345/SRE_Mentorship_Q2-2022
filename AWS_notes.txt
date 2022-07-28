@@ -1,0 +1,50 @@
+### AWS Overview
+
+# Concept of AWS
+
+- Amazon Web Services offers a broad set of global cloud-based products including compute, storage, databases, analytics, networking, mobile, developer tools, management tools, IoT, security, and enterprise applications: on-demand, available in seconds, with pay-as-you-go pricing.
+
+- Cloud computing is the on-demand delivery of compute power, database, storage, applications, and other IT resources through a cloud services platform via the internet with pay-as-you-go pricing.
+
+- AWS Cloud is used with or instead Hardware.
+
+- Easier to maintain, scale and manage.
+
+- Six advantages of cloud computing" 
+	- Trade fixed expense for variable expense.
+	- Benefit from massive economies of scale.
+	- Access as much or as little capacity as you need.
+	- Increase speed and agility.
+	- No heavy and expensive hardware needed.
+	- Go global in minutes
+
+# Cloud computing models:
+	- Infrastructure as a Service (IaaS): for cloud IT, provides access to networking features, computers and data storage space.
+	- Platform as a Service (PaaS): removes the need to manage the infrastructure (hardware and operating systems) and allows you to focus on the deployment and management.
+	- Software as a Service (SaaS): avoid service maintainance to think how to use your software. (examlpe: web-based email which you can use without having to manage the service).
+	
+# Global infrastructure:
+	- The AWS Cloud infrastructure is built around AWS Regions and Availability Zones
+	- An AWS Region is a physical location in the world where we have multiple Availability Zones. 
+	- Availability Zones consist of one or more discrete data centers, each with redundant power, networking, and connectivity, housed in separate facilities.
+
+# Security:
+	- Cloud security at AWS is the highest priority. 
+	- AWS builds security into the core of our cloud infrastructure, and offers foundational services to help organizations meet their unique security requirements in the cloud.
+	- As an AWS customer, you will benefit from a data center and network architecture built to meet the requirements of the most security-sensitive organizations.
+	- Benefits: 
+		- Keep Your data safe.
+		- Meet compliance requirements.
+		- Save money.
+		- Scale quickly.
+		
+# Compliance:
+	- AWS Cloud Compliance helps you understand the robust controls in place at AWS for security and data protection in the cloud. 
+	- Compliance is a shared responsibility between AWS and the customer.
+
+# Amazon Web Services Cloud:
+	- AWS consists of many cloud services that you can use.
+	- To access the services, you can use the AWS Management Console, the AWS CLI, or Software Development Kits (SDKs).
+	- List of Services by category: Analytics, Application Integration, AR and VR, Blockchain, Business Applications, Cloud Financial Management, etc.
+	- Compute Services category: includes EC2, Lambda, etc.
+	- Networking and Content Delivery category: includes VPC, ELB (Elastic Load Balancing), Route 53, VPN, etc.
