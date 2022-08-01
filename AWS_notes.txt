@@ -19,9 +19,9 @@
 	- Go global in minutes
 
 # Cloud computing models:
-	- Infrastructure as a Service (IaaS): for cloud IT, provides access to networking features, computers and data storage space.
-	- Platform as a Service (PaaS): removes the need to manage the infrastructure (hardware and operating systems) and allows you to focus on the deployment and management.
-	- Software as a Service (SaaS): avoid service maintainance to think how to use your software. (examlpe: web-based email which you can use without having to manage the service).
+	- Infrastructure as a Service (IaaS): (AWS, Azure) for cloud IT, provides access to networking features, computers and data storage space.
+	- Platform as a Service (PaaS): (Kubernets) removes the need to manage the infrastructure (hardware and operating systems) and allows you to focus on the deployment and management.
+	- Software as a Service (SaaS): (Office365) avoid service maintainance to think how to use your software. (examlpe: web-based email which you can use without having to manage the service).
 	
 # Global infrastructure:
 	- The AWS Cloud infrastructure is built around AWS Regions and Availability Zones
