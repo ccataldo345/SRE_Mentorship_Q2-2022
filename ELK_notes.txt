@@ -1,0 +1,97 @@
+### ELK notes
+
+- https://aws.amazon.com/opensearch-service/the-elk-stack/
+- https://www.youtube.com/watch?v=mLVYD8y7l6U&list=PLXH6fsPmiZS7BbPtouAIlpduTau2x60Fh&index=15
+- https://www.elastic.co/guide/en/elasticsearch/reference/current/deb.html
+
+# What is the ELK stack?
+- a stack that comprises of three popular projects: Elasticsearch, Logstash, and Kibana. 
+
+- E = Elasticsearch: search engine
+a distributed search and analytics engine
+
+- L = Logstash: receive, transform and send the data to ElasticSearch
+Data ingestion tool that allows you to collect data from a variety of sources, transform it, and send it to your desired destination.
+
+- K = Kibana: Data visualization tool for logs and events
+Has interactive charts, pre-built aggregations and filters, and geospatial support.
+
+# Why is the ELK stack so popular?
+- monitor the infrastructure as well as process any server logs, application logs, and clickstreams. 
+- log analysis for developers and DevOps 
+- failure diagnosis, application performance, and infrastructure monitoring
+
+# Amazon OpenSearch Service 
+- support for 19 versions of Elasticsearch (1.5 to 7.10 versions), and visualization capabilities powered by OpenSearch Dashboards and Kibana (1.5 to 7.10 versions). 
+- service integrates with Logstash
+
+# NODES:
+- MASTER: cluster management
+- DATA: store data
+- CLIENT: like a load balancer for processing rquests
+
+# Install ELK manually on server:
+1. sudo apt-get update && sudo apt-get upgrade -y
+2. sudo apt-get install default-jre -y
+3. java -version
+4. https://www.elastic.co/guide/en/elasticsearch/reference/current/deb.html
+5. sudo apt install elasticsearch
+	- sudo systemctl deamon-reload
+	- sudo systemctl enable elasticsearch.service
+	- sudo systemctl start elasticsearch.service
+	- curl http://localhost:9200
+6. sudo apt install logstash
+7. sudo apt install kibana
+  - nano /etc/kibana/kibana.yml
+    - add server.host: "0.0.0.0"
+    - add elasticsearch.hosts: ["http://localhost:9200"]
+  - sudo service kibana start
+  - sudo service kibana status
+ - check on browser: <publicIP>:<port(5601)> 
+  
+# METRICBEAT
+- collects metrics from the OS of the server and send it to ElastiSearch or LogStash
+- sudo apt install metricbeat
+- sudo service metricbeat start
+- sudo service metricbeat status
+- see the index in ElasticSearch localhost in: Stack Management > Index Management
+- create an Index Pattern: Stack Management > Index Patterns > Create Index Pattern
+	> copy/paste the index name created
+	> Timestamp: @timestamp
+	> Create Index Pattern
+- Discover: see the logs
+
+# Logstash conf:
+- nano /etc/logstash/conf.d/apache.conf
+input {
+ file {
+ path = "/home/ubuntu/apache-daily-access.log"
+ start_position = "beginning"
+ sincedb_path = "/dev/null"
+ }
+}
+filter {
+ grok {
+  match = { "message" = "%{COMBINEDAPACHELOG}" }
+ }
+ date {
+  match = [ "timestamp" , "dd/MMM/yyyy:HH:mm:ss Z" ]
+ }
+ geoip {
+  source = "clientip"
+ }
+}
+output {
+ elasticsearch {
+  hosts = ["localhost:9200"]
+ }
+}
+- sudo service logstash start
+- sudo service logstash status
+
+# AWS Route 53
+- DNS - Domain Name System 
+- "A" record map a name to an IP
+- "CNAME" record map a name to another name (Main-domain to Sub-domain)
+
+
