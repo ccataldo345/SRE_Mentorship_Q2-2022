@@ -41,7 +41,11 @@
 		aws iam list-users   #check AWS users
 		
 # list of commands:
-https://github.com/in28minutes/devops-master-class/tree/master/terraform#commands-executed 
+https://github.com/in28minutes/devops-master-class/tree/master/terraform#commands-executed
+
+- terraform show > inspect current state?
+- terraform state list > list resources created
+- terraform state mv > rename an existing resource
 
 # create an S3 bucket in AWS (store and retrieve data, high durability and availabilty):
 	- In AWS: Services > S3 > Create a Bucket
