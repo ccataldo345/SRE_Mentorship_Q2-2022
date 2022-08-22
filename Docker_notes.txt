@@ -6,11 +6,21 @@ service docker start
 service docker status
 docker run -p 5000:5000 in28min/hello-world-python:0.0.1.RELEASE
 	- 5000:5000 = <localhost_port>:<container_port> 
-	- image: repository
-	- container: running version of the image of the project repository (1 repo can have multiple containers)
+	- Release = Tag
+	- image = repository
+	
+	- container: running version of the image of the project image (1 image can have multiple containers)
+	
 	- each running container must have a diffreent local port (-p 5001:5000)
 alias chrome='"/mnt/c/Program Files (x86)/Google/Chrome/Application/chrome.exe"'
 chrome http://localhost:5000/
+
+- Commands:
+docker container ls = list all containers (running images)
+docker container ls -a = list all containers (running and exited images)
+docker image ls -a = list all docker images downloaded in the local machine
+docker container start/stop/kill/rm ID = start/stop/kill/remove a container
+docker-compose -f file.yml up = load a specific docker compose file
 
 # Docker commands 01:
 docker run -p 5001:5000 in28min/hello-world-java:0.0.1.RELEASE
