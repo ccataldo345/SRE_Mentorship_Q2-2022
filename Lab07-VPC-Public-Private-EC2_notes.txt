@@ -1,0 +1,143 @@
+Lab 07 - Create a VPC with 1 Public EC2 and 1 Private EC2, using a NAT Gateway
+
+> The Private EC2 has not a public IP address, therefore it is possible to ssh into it only from the Public EC2 (VPC), not from a local machine.
+> Access the Public EC2 via SSH from the local machine using a Private Key-pair Pem file.
+> Access the Private EC2 via SSH from the Public EC2 using a Private Key-pair Pem file.
+> Both EC2 can access internet through the Internet Gateway. 
+
+AWS NAT Gateway using Terraform | AWS Private Subnet using Terraform | Terraform Tutorial
+https://www.youtube.com/watch?v=npLeXQD12SI&list=PLdsu0umqbb8NxoJUNup3PCb38RQpQtm9p&index=4
+
+# Outputs:
+chris:~/.../07-tf-vpc-private-public$ terraform show
+aws_public_instance_public_ip = "35.173.187.15"	>>> (AWS > EC2 > Instances > EC@_Public_Instance > Public IPv4 address)
+aws_private_instance_private_ip = "10.0.3.186">>> (AWS > EC2 > Instances > EC@_Private_Instance > Private IPv4 addresses)
+
+# Check IPV4 addresses:
+chris:~/.../07-tf-vpc-private-public$ echo $(terraform output -raw aws_public_instance_public_ip)
+35.173.187.15
+chris:~/.../07-tf-vpc-private-public$ echo $(terraform output -raw aws_private_instance_private_ip)
+10.0.3.186
+
+# Check if Public IPv4 address of Public EC2 is accessible from local machine:
+curl 35.173.187.15
+
+
+# Copy Pem file from local machine to Public Ec2 home folder:
+scp -i tf-key-pair.pem tf-key-pair.pem ec2-user@$(terraform output -raw aws_public_instance_public_ip):~/
+tf-key-pair.pem                                                                                                           100% 3243    21.7KB/s   00:00
+
+# SSH from local machine into Public Ec2 (and give read only permission if necessary):
+chris:~/.../07-tf-vpc-private-public$ ssh -i tf-key-pair.pem ec2-user@$(terraform output -raw aws_public_instance_public_ip)
+Last login: Thu Mar  9 12:08:01 2023 from 147.161.249.86
+
+       __|  __|_  )
+       _|  (     /   Amazon Linux 2 AMI
+      ___|\___|___|
+
+https://aws.amazon.com/amazon-linux-2/
+4 package(s) needed for security, out of 6 available
+Run "sudo yum update" to apply all updates.
+[ec2-user@ip-10-0-1-158 ~]$
+
+# Check Pem file in Public EC2:
+[ec2-user@ip-10-0-1-158 ~]$ ll
+total 4
+-r-------- 1 ec2-user ec2-user 3243 Mar  9 12:10 tf-key-pair.pem
+[ec2-user@ip-10-0-1-158 ~]$ sudo chmod 400 tf-key-pair.pem
+[ec2-user@ip-10-0-1-158 ~]$ ll
+total 4
+-r-------- 1 ec2-user ec2-user 3243 Mar  9 12:10 tf-key-pair.pem
+
+# Check html file in Public EC2:
+[ec2-user@ip-10-0-1-158 ~]$ cat /var/www/html/index.html
+Welcome to the Public Server!
+
+# Check internet connectivity in Public EC2:
+[ec2-user@ip-10-0-1-158 ~]$ ping 8.8.8.8
+PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=112 time=0.818 ms
+^C
+--- 8.8.8.8 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2025ms
+rtt min/avg/max/mdev = 0.818/0.827/0.846/0.035 ms
+
+# Check web homepage in Public EC2:
+[ec2-user@ip-10-0-1-158 ~]$ curl 10.0.1.158
+Welcome to the Public Server!
+
+# SSH from Public EC2 into Private EC@:
+[ec2-user@ip-10-0-1-158 ~]$ sudo ssh -i tf-key-pair.pem ec2-user@10.0.3.186
+Last login: Thu Mar  9 11:54:04 2023 from ip-10-0-1-158.ec2.internal
+
+       __|  __|_  )
+       _|  (     /   Amazon Linux 2 AMI
+      ___|\___|___|
+
+https://aws.amazon.com/amazon-linux-2/
+4 package(s) needed for security, out of 6 available
+Run "sudo yum update" to apply all updates.
+[ec2-user@ip-10-0-3-186 ~]$
+
+# Check html file in Private EC2:
+[ec2-user@ip-10-0-3-186 ~]$ cat /var/www/html/index.html
+Welcome to the Private Server!
+
+# Check internet connectivity in Private EC2:
+[ec2-user@ip-10-0-3-186 ~]$ ping 8.8.8.8
+PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=52 time=1.62 ms
+^C
+--- 8.8.8.8 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1001ms
+rtt min/avg/max/mdev = 0.788/1.204/1.620/0.416 ms
+
+ # Check web homepage in Private EC2:
+[ec2-user@ip-10-0-3-186 ~]$ curl 10.0.3.186
+Welcome to the Private Server!
+
+###########################
+# Copy Pem file from Public EC2 to Private EC2:
+[ec2-user@ip-10-0-1-158 ~]$ scp -i tf-key-pair.pem tf-key-pair.pem ec2-user@10.0.3.186:~/
+The authenticity of host '10.0.3.186 (10.0.3.186)' can't be established.
+ECDSA key fingerprint is SHA256:6RhINtLZORX4O/ZM2LTAv1zESQs5r+TR+nAITQADfhY.
+ECDSA key fingerprint is MD5:60:de:db:16:65:ed:b1:71:e4:30:52:16:a7:ab:6a:bf.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '10.0.3.186' (ECDSA) to the list of known hosts.
+tf-key-pair.pem                                                                                               100% 3243     1.3MB/s   00:00
+
+# SSH into Private EC2 from Public EC2:
+[ec2-user@ip-10-0-1-158 ~]$ ssh -i tf-key-pair.pem ec2-user@10.0.3.186
+Last login: Thu Mar  9 12:33:21 2023 from ip-10-0-1-158.ec2.internal
+
+       __|  __|_  )
+       _|  (     /   Amazon Linux 2 AMI
+      ___|\___|___|
+
+https://aws.amazon.com/amazon-linux-2/
+4 package(s) needed for security, out of 6 available
+Run "sudo yum update" to apply all updates.
+[ec2-user@ip-10-0-3-186 ~]$
+
+# Check Pem file in Private EC2:
+[ec2-user@ip-10-0-3-186 ~]$ ll
+total 4
+-r-------- 1 ec2-user ec2-user 3243 Mar  9 12:41 tf-key-pair.pem
+
+# SSH into Public EC2 from Private EC2:
+[ec2-user@ip-10-0-3-186 ~]$ ssh -i tf-key-pair.pem ec2-user@10.0.1.158
+The authenticity of host '10.0.1.158 (10.0.1.158)' can't be established.
+ECDSA key fingerprint is SHA256:hfgw1tI2ioJ8kRHbhOhekRjgJIXiNgkmjWavQiv7va8.
+ECDSA key fingerprint is MD5:91:ea:43:36:96:5b:56:c4:57:2d:a6:e4:a6:54:97:14.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '10.0.1.158' (ECDSA) to the list of known hosts.
+Last login: Thu Mar  9 12:25:02 2023 from 147.161.249.86
+
+       __|  __|_  )
+       _|  (     /   Amazon Linux 2 AMI
+      ___|\___|___|
+
+https://aws.amazon.com/amazon-linux-2/
+4 package(s) needed for security, out of 6 available
+Run "sudo yum update" to apply all updates.
+[ec2-user@ip-10-0-1-158 ~]$
