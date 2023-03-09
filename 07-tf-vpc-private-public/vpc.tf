@@ -4,7 +4,10 @@ resource "aws_vpc" "dev_vpc" {
   instance_tenancy     = "default"
   enable_dns_support   = "true"
   enable_dns_hostnames = "true"
-  enable_classiclink   = "false"
+  # enable_classiclink   = "false"  
+  # WARNING: With the retirement of EC2-Classic the enable_classiclink attribute has been deprecated and will be removed in a future version.
+  # ClassicLink allows you to link EC2-Classic instances to a VPC in your account, within the same Region. 
+  # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html
   tags = {
     Name = "VPC"
   }

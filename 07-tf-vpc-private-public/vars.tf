@@ -3,5 +3,5 @@ variable "AWS_REGION" {
 }
 
 variable "aws_key_pair" {
-  default = "~/aws/aws_keys/default-ec2.pem"
+  default = "./tf-key-pair.pem"
 }

@@ -40,15 +40,34 @@ resource "aws_security_group" "http_server_sg" {
   }
 }
 
+// Create a Key Pair .pem file:
+// Create a Public Key Pair in AWS > EC2
+resource "aws_key_pair" "tf-key-pair" {
+  key_name   = "tf-key-pair"
+  public_key = tls_private_key.rsa.public_key_openssh
+}
+// Create a Private Key Pair pem file in the local folder
+resource "tls_private_key" "rsa" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+resource "local_file" "tf-key" {
+  content         = tls_private_key.rsa.private_key_pem
+  filename        = "tf-key-pair.pem"
+  file_permission = "0400"
+}
+
 // Create an AWS instance (EC2 Virtual Server)
 resource "aws_instance" "http_server" {
   # ami                    = "ami-0cff7528ff583bf9a"
-  ami                    = data.aws_ami.aws_linux_2_latest.id
-  key_name               = "default-ec2"
+  ami = data.aws_ami.aws_linux_2_latest.id
+  # key_name               = "default-ec2"
+  key_name               = "tf-key-pair"
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.http_server_sg.id]
   // subnet_id              = "subnet-061a51286cb94f112" // VPC > Subnets (pic any default (witohout name))
-  subnet_id = tolist(data.aws_subnet_ids.default_subnets.ids)[0]
+  # subnet_id = tolist(data.aws_subnet_ids.default_subnets.ids)[0]
+  subnet_id = data.aws_subnets.default_subnets.ids[0]
 
   connection {
     type        = "ssh"

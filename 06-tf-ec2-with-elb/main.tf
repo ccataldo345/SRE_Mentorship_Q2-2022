@@ -31,31 +31,48 @@ resource "aws_security_group" "elb_sg" {
 // create resources for the load balancer:
 resource "aws_elb" "elb" {
   name            = "elb"
-  subnets         = data.aws_subnet_ids.default_subnets.ids
+  subnets         = data.aws_subnets.default_subnets.ids
   security_groups = [aws_security_group.elb_sg.id]
   instances       = values(aws_instance.http_servers).*.id
   listener {
     instance_port     = 80
     instance_protocol = "http"
     lb_port           = 80
-    lb_protocol      = "http"
+    lb_protocol       = "http"
   }
 }
 
+// Create a Key Pair .pem file:
+// Create a Public Key Pair in AWS > EC2
+resource "aws_key_pair" "tf-key-pair" {
+  key_name   = "tf-key-pair"
+  public_key = tls_private_key.rsa.public_key_openssh
+}
+// Create a Private Key Pair pem file in the local folder
+resource "tls_private_key" "rsa" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+resource "local_file" "tf-key" {
+  content         = tls_private_key.rsa.private_key_pem
+  filename        = "tf-key-pair.pem"
+  file_permission = "0400"
+}
 
 // Create an AWS instance (EC2 Virtual Server)
 resource "aws_instance" "http_servers" {
   # ami                    = "ami-0cff7528ff583bf9a"
   ami                    = data.aws_ami.aws_linux_2_latest.id
-  key_name               = "default-ec2"
+  key_name               = "tf-key-pair"
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.elb_sg.id]
   // subnet_id              = "subnet-061a51286cb94f112" // VPC > Subnets (pic any default (witohout name))
-  for_each  = data.aws_subnet_ids.default_subnets.ids
+  # for_each  = data.aws_subnet_ids.default_subnets.ids   // old TF version
+  for_each  = toset(data.aws_subnets.default_subnets.ids)
   subnet_id = each.value
 
   tags = {
-    name : "http_server_${each.value}"
+    name : "http_servers_${each.value}"
   }
 
   connection {
@@ -67,6 +84,3 @@ resource "aws_instance" "http_servers" {
 
   user_data = file("install_httpd.sh")
 }
-
-// ami-0cff7528ff583bf9a
-// vpc-09e25fb07f9d8c373

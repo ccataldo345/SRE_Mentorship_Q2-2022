@@ -52,10 +52,27 @@ resource "aws_security_group_rule" "http_rule_out" {
   security_group_id = aws_security_group.private_sg.id
 }
 
+// Create a Key Pair .pem file:
+// Create a Public Key Pair in AWS > EC2 > Key Pairs
+resource "aws_key_pair" "tf-key-pair" {
+  key_name   = "tf-key-pair"
+  public_key = tls_private_key.rsa.public_key_openssh
+}
+// Create a Private Key Pair pem file in the local folder
+resource "tls_private_key" "rsa" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+resource "local_file" "tf-key" {
+  content         = tls_private_key.rsa.private_key_pem
+  filename        = "tf-key-pair.pem"
+  file_permission = "0400"
+}
+
 // Create EC2 instance in Public subnet
 resource "aws_instance" "public_instance" {
   ami                         = data.aws_ami.aws_linux_2_latest.id
-  key_name                    = "default-ec2"
+  key_name                    = "tf-key-pair"
   instance_type               = "t2.micro"
   subnet_id                   = aws_subnet.public_subnet.id
   count                       = 1
@@ -82,13 +99,13 @@ resource "aws_instance" "public_instance" {
 // Create EC2 instance in Private subnet
 resource "aws_instance" "private_instance" {
   ami                         = data.aws_ami.aws_linux_2_latest.id
-  key_name                    = "default-ec2"
+  key_name                    = "tf-key-pair"
   instance_type               = "t2.micro"
   vpc_security_group_ids      = [aws_security_group.private_sg.id]
   subnet_id                   = aws_subnet.private_subnet.id
   count                       = 1
   associate_public_ip_address = "false"
-  user_data = file("install-httpd_private-server.sh")
+  user_data                   = file("install-httpd_private-server.sh")
 
   tags = {
     Name = "EC2_Private_instance"
